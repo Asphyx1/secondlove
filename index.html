@@ -7,6 +7,7 @@
 
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+
   body{
     margin:0;
     background:#a8eaff;
@@ -17,6 +18,7 @@
     font-family:'Inter',sans-serif;
     overflow:hidden;
   }
+
   .container{
     width:90%;
     max-width:700px;
@@ -27,6 +29,14 @@
     box-shadow:0 8px 20px rgba(0,0,0,0.1);
     text-align:center;
   }
+
+  #text{
+    font-size:1.1rem;
+    margin-bottom:20px;
+    color:#00374b;
+    white-space:pre-line;
+  }
+
   .choice{
     margin:12px 0;
     padding:14px 20px;
@@ -40,23 +50,24 @@
     transform:scale(1.02);
     background:#f0faff;
   }
-  #text{font-size:1.1rem;margin-bottom:20px;color:#00374b}
 
-  /* Falling leaves */
-  @keyframes fall {
-    0% { transform: translateY(-10vh) rotate(0deg); }
-    100% { transform: translateY(110vh) rotate(360deg); }
+  @keyframes fallingLeaf{
+    from{
+      transform:translateY(-20vh) rotate(0deg);
+      opacity:0.9;
+    }
+    to{
+      transform:translateY(120vh) rotate(120deg);
+      opacity:0;
+    }
   }
+
   .leaf{
     position:fixed;
     top:-10vh;
-    width:24px;
-    height:24px;
-    background-image:url('https://i.imgur.com/PMb9H6p.png');
-    background-size:contain;
-    background-repeat:no-repeat;
-    animation: fall linear infinite;
-    opacity:0.9;
+    font-size:22px;
+    animation:fallingLeaf linear infinite;
+    pointer-events:none;
   }
 </style>
 </head>
@@ -68,55 +79,138 @@
 </div>
 
 <script>
-/* STORY */
+// STORY
 const story = {
   start:{
-    text:"Hari ini menurutmu kita ngapain enaknya?",
+    text:`Hari ini gue penasaran...
+Sebenernya akhir-akhir ini, apa hal yang paling sering kamu pikirin tentang kita?`,
     choices:[
-      {label:"Jalan sore berdua", next:"sore"},
-      {label:"Makan enak", next:"makan"},
-      {label:"Nonton film bareng", next:"film"}
+      { label:"Tentang masa depan kita", next:"future"},
+      { label:"Tentang perasaan kamu ke aku", next:"feel"},
+      { label:"Tentang kenapa kita bisa sejauh ini", next:"why"}
     ]
   },
 
-  sore:{
-    text:"Kita jalan sore sambil ngobrol kecil kecil... menurutmu enaknya jalan kemana?",
+  future:{
+    text:`Kalau ngomongin masa depan...
+Kamu tuh tipe yang takut mikirin jauh-jauh, atau justru seneng ngebayangin semuanya?`,
     choices:[
-      {label:"Taman sepi", next:"lihatMuka"},
-      {label:"Pinggir danau", next:"lihatMuka"}
+      { label:"Sebenernya aku takut", next:"future_fear"},
+      { label:"Aku seneng ngebayangin", next:"future_dream"}
     ]
   },
 
-  makan:{
-    text:"Kita makan enak, kamu pesen yang manis atau yang gurih?",
+  future_fear:{
+    text:`Takut tuh wajar...
+Tapi menurut kamu, bagian mana dari masa depan yang bikin kamu paling khawatir?`,
     choices:[
-      {label:"Manis", next:"lihatMuka"},
-      {label:"Gurih", next:"lihatMuka"}
+      { label:"Takut ga cukup buat kamu", next:"deep1"},
+      { label:"Takut kita berubah", next:"deep1"}
     ]
   },
 
-  film:{
-    text:"Kita nonton film, genre apa nih?",
+  future_dream:{
+    text:`Lucu ya...
+Orang yang mau sama seseorang biasanya punya bayangan kecil.
+Kamu... kalo mikirin aku, bayanginnya yang kayak apa sih?`,
     choices:[
-      {label:"Romance", next:"lihatMuka"},
-      {label:"Comedy", next:"lihatMuka"}
+      { label:"Kehidupan bareng yang chill aja", next:"deep1"},
+      { label:"Yang serius banget sampe masa depan", next:"deep1"}
     ]
   },
 
-  /* BAGIAN YANG KAMU UBAH */
-  lihatMuka:{
-    text:"coba kamu liat muka aku...",
+  feel:{
+    text:`Tentang perasaan...
+Menurut kamu, kamu lebih banyak sayang atau lebih banyak takut kehilangan?`,
     choices:[
-      {label:"udah liat nih", next:"spotifyChoices"}
+      { label:"Lebih banyak sayang", next:"feel_love"},
+      { label:"Lebih takut kehilangan", next:"feel_fear"}
     ]
   },
 
-  /* PILIHAN SPOTIFY */
-  spotifyChoices:{
-    text:"",
+  feel_love:{
+    text:`Sayang tuh lucu ya...
+Kadang nunjukinnya gampang, kadang malah nyangkut di tenggorokan.
+Selama ini, cara kamu paling jujur buat nunjukin sayang itu apa sih?`,
     choices:[
-      { label:"iyaa, aku mau beryl", link:"https://open.spotify.com/track/0WQiDwKJclirSYG9v5tayI?si=7aeace39b2e44fc1" },
-      { label:"iyaa aku mau bangettt beryl", link:"https://open.spotify.com/track/0WQiDwKJclirSYG9v5tayI?si=7aeace39b2e44fc1" }
+      { label:"Lewat perhatian kecil", next:"deep2"},
+      { label:"Lewat cara aku ngomong", next:"deep2"}
+    ]
+  },
+
+  feel_fear:{
+    text:`Takut kehilangan itu tanda kamu peduli...
+Tapi kadang juga capek.
+Menurut kamu, apa hal yang paling bikin rasa takut itu muncul?`,
+    choices:[
+      { label:"Kepikiran hal-hal buruk", next:"deep2"},
+      { label:"Takut aku berubah", next:"deep2"}
+    ]
+  },
+
+  why:{
+    text:`Jujur aja...
+Kamu pernah mikir ga, kenapa kita bisa nyantol satu sama lain selama ini?`,
+    choices:[
+      { label:"Pernah banget", next:"why_yes"},
+      { label:"Ga kepikiran, tapi kerasa", next:"why_feel"}
+    ]
+  },
+
+  why_yes:{
+    text:`Menurutmu... faktor paling kuatnya apa sih?
+Cocok? Nyaman? Atau kebiasaan?`,
+    choices:[
+      { label:"Cocok", next:"deep3"},
+      { label:"Nyaman", next:"deep3"}
+    ]
+  },
+
+  why_feel:{
+    text:`Kadang yang ga dijelasin malah paling berasa.
+Menurut kamu, apa hal kecil dariku yang bikin kamu tetep stay?`,
+    choices:[
+      { label:"Cara kamu ngomong", next:"deep3"},
+      { label:"Cara kamu liat aku", next:"deep3"}
+    ]
+  },
+
+  deep1:{
+    text:`Kamu tau ga...
+Dari semua hal yang kamu pikirin barusan, aku cuma mau bilang satu hal:
+Aku tetep di sini.`,
+    choices:[{label:"lanjut", next:"deepFinal"}]
+  },
+
+  deep2:{
+    text:`Lucu ya...
+Semua jawaban kamu tadi, entah yang berat atau yang manis...
+Semuanya bikin aku makin ngerti kamu.`,
+    choices:[{label:"lanjut", next:"deepFinal"}]
+  },
+
+  deep3:{
+    text:`Kadang hubungan yang keliatannya simpel, diam-diam punya kedalaman yg cuma kita yang tau.`,
+    choices:[{label:"lanjut", next:"deepFinal"}]
+  },
+
+  deepFinal:{
+    text:`Sekarang...
+Ada satu hal terakhir yang mau aku bilang ke kamu.`,
+    choices:[{label:"apa?", next:"preFinal"}]
+  },
+
+  preFinal:{
+    text:`coba kamu liat muka aku.`,
+    choices:[{label:"udah liat nih", next:"finalChoice"}]
+  },
+
+  // NEW FINAL CHOICES
+  finalChoice:{
+    text:` `,
+    choices:[
+      { label:"iyaa, aku mau beryl", link:"https://open.spotify.com/track/0WQiDwKJclirSYG9v5tayI?si=7aeace39b2e44fc1"},
+      { label:"iyaa aku mau bangettt beryl", link:"https://open.spotify.com/track/0WQiDwKJclirSYG9v5tayI?si=7aeace39b2e44fc1"}
     ]
   }
 };
@@ -138,7 +232,7 @@ function render(){
     if(c.link){
       div.onclick = ()=> window.location.href = c.link;
     } else {
-      div.onclick = ()=>{ current=c.next; render(); }
+      div.onclick = ()=>{ current=c.next; render(); };
     }
 
     choiceBox.appendChild(div);
@@ -147,17 +241,23 @@ function render(){
 
 render();
 
-/* LEAVES */
+// Falling leaves
 function spawnLeaf(){
-  const leaf=document.createElement('div');
-  leaf.className='leaf';
-  leaf.style.left = Math.random()*100 + 'vw';
-  leaf.style.animationDuration = (4 + Math.random()*4) + 's';
-  leaf.style.transform = `rotate(${Math.random()*360}deg)`;
+  const leaf = document.createElement('div');
+  leaf.className = 'leaf';
+
+  const leaves = ["🌿","🍃","🍂"];
+  leaf.textContent = leaves[Math.floor(Math.random()*leaves.length)];
+
+  leaf.style.fontSize = (18 + Math.random()*18) + "px";
+  leaf.style.left = Math.random()*100 + "vw";
+  leaf.style.animationDuration = (4 + Math.random()*4) + "s";
+
   document.body.appendChild(leaf);
-  setTimeout(()=> leaf.remove(), 9000);
+  setTimeout(()=>leaf.remove(),9000);
 }
-setInterval(spawnLeaf, 300);
+
+setInterval(spawnLeaf, 250);
 </script>
 </body>
 </html>
