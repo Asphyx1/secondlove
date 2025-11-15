@@ -4,8 +4,10 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Choose Your Story</title>
+
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+
   body{
     margin:0;
     background:#a8eaff;
@@ -15,7 +17,6 @@
     height:100vh;
     font-family:'Inter',sans-serif;
     overflow:hidden;
-    position:relative;
   }
 
   .container{
@@ -26,7 +27,14 @@
     border-radius:18px;
     backdrop-filter:blur(8px);
     box-shadow:0 8px 20px rgba(0,0,0,0.1);
-    text-align:center
+    text-align:center;
+  }
+
+  #text{
+    font-size:1.1rem;
+    margin-bottom:20px;
+    color:#00374b;
+    white-space:pre-line;
   }
 
   .choice{
@@ -36,28 +44,21 @@
     background:white;
     cursor:pointer;
     transition:0.2s;
-    font-weight:600
+    font-weight:600;
   }
   .choice:hover{
     transform:scale(1.02);
-    background:#f0faff
+    background:#f0faff;
   }
 
-  #text{
-    font-size:1.1rem;
-    margin-bottom:20px;
-    color:#00374b;
-    white-space:pre-line
-  }
-
-  /* LEAF ANIMATION */
+  /* Falling leaf animation */
   @keyframes fallingLeaf{
-    0%{
-      transform:translateY(-10vh) rotate(0deg);
+    from{
+      transform:translateY(-20vh) rotate(0deg);
       opacity:0.9;
     }
-    100%{
-      transform:translateY(120vh) rotate(360deg);
+    to{
+      transform:translateY(120vh) rotate(120deg);
       opacity:0;
     }
   }
@@ -65,11 +66,7 @@
   .leaf{
     position:fixed;
     top:-10vh;
-    width:22px;
-    height:22px;
-    background-image:url('https://i.ibb.co/MV4z5VB/leaf.png');
-    background-size:contain;
-    background-repeat:no-repeat;
+    font-size:22px;
     animation:fallingLeaf linear infinite;
     pointer-events:none;
   }
@@ -83,6 +80,7 @@
 </div>
 
 <script>
+// STORY
 const story = {
   start:{
     text:`Hari ini gue penasaran...
@@ -178,15 +176,24 @@ Menurut kamu, apa hal kecil dariku yang bikin kamu tetep stay?`,
     ]
   },
 
-  deep1:{ text:`Kamu tau ga...
+  deep1:{
+    text:`Kamu tau ga...
 Dari semua hal yang kamu pikirin barusan, aku cuma mau bilang satu hal:
-Aku tetep di sini.`, choices:[{label:"lanjut", next:"deepFinal"}] },
+Aku tetep di sini.`,
+    choices:[{label:"lanjut", next:"deepFinal"}]
+  },
 
-  deep2:{ text:`Lucu ya...
+  deep2:{
+    text:`Lucu ya...
 Semua jawaban kamu tadi, entah yang berat atau yang manis...
-Semuanya bikin aku makin ngerti kamu.`, choices:[{label:"lanjut", next:"deepFinal"}] },
+Semuanya bikin aku makin ngerti kamu.`,
+    choices:[{label:"lanjut", next:"deepFinal"}]
+  },
 
-  deep3:{ text:`Kadang hubungan yang keliatannya simpel, diam-diam punya kedalaman yg cuma kita yang tau.`, choices:[{label:"lanjut", next:"deepFinal"}] },
+  deep3:{
+    text:`Kadang hubungan yang keliatannya simpel, diam-diam punya kedalaman yg cuma kita yang tau.`,
+    choices:[{label:"lanjut", next:"deepFinal"}]
+  },
 
   deepFinal:{
     text:`Sekarang...
@@ -215,7 +222,8 @@ function render(){
   choiceBox.innerHTML = "";
 
   if(current === "spotify"){
-    window.location.href = "https://open.spotify.com/track/0WQiDwKJclirSYG9v5tayI?si=8bcee7f372474dbb";
+    window.location.href =
+      "https://open.spotify.com/track/0WQiDwKJclirSYG9v5tayI?si=8bcee7f372474dbb";
     return;
   }
 
@@ -227,24 +235,26 @@ function render(){
     choiceBox.appendChild(div);
   });
 }
+
 render();
 
-/* LEAF SPAWNER */
+// Falling leaves
 function spawnLeaf(){
-  const leaf=document.createElement('div');
-  leaf.className='leaf';
+  const leaf = document.createElement('div');
+  leaf.className = 'leaf';
 
-  const size = 18 + Math.random()*20;
-  leaf.style.width = size + 'px';
-  leaf.style.height = size + 'px';
+  const leaves = ["🌿","🍃","🍂"];
+  leaf.textContent = leaves[Math.floor(Math.random()*leaves.length)];
 
-  leaf.style.left = Math.random()*100 + 'vw';
-  leaf.style.animationDuration = (5 + Math.random()*4)+'s';
+  leaf.style.fontSize = (18 + Math.random()*18) + "px";
+  leaf.style.left = Math.random()*100 + "vw";
+  leaf.style.animationDuration = (4 + Math.random()*4) + "s";
 
   document.body.appendChild(leaf);
-  setTimeout(()=>leaf.remove(),10000);
+  setTimeout(()=>leaf.remove(),9000);
 }
-setInterval(spawnLeaf,300);
+
+setInterval(spawnLeaf, 250);
 </script>
 </body>
 </html>
