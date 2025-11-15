@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Choose Your Story</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+  body{
+    margin:0;
+    background:#a8eaff;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    font-family:'Inter',sans-serif;
+    overflow:hidden;
+    position:relative;
+  }
+
+  .container{
+    width:90%;
+    max-width:700px;
+    background:rgba(255,255,255,0.75);
+    padding:24px;
+    border-radius:18px;
+    backdrop-filter:blur(8px);
+    box-shadow:0 8px 20px rgba(0,0,0,0.1);
+    text-align:center
+  }
+
+  .choice{
+    margin:12px 0;
+    padding:14px 20px;
+    border-radius:14px;
+    background:white;
+    cursor:pointer;
+    transition:0.2s;
+    font-weight:600
+  }
+  .choice:hover{
+    transform:scale(1.02);
+    background:#f0faff
+  }
+
+  #text{
+    font-size:1.1rem;
+    margin-bottom:20px;
+    color:#00374b;
+    white-space:pre-line
+  }
+
+  /* LEAF ANIMATION */
+  @keyframes fallingLeaf{
+    0%{
+      transform:translateY(-10vh) rotate(0deg);
+      opacity:0.9;
+    }
+    100%{
+      transform:translateY(120vh) rotate(360deg);
+      opacity:0;
+    }
+  }
+
+  .leaf{
+    position:fixed;
+    top:-10vh;
+    width:22px;
+    height:22px;
+    background-image:url('https://i.ibb.co/MV4z5VB/leaf.png');
+    background-size:contain;
+    background-repeat:no-repeat;
+    animation:fallingLeaf linear infinite;
+    pointer-events:none;
+  }
+</style>
+</head>
+
+<body>
+<div class="container">
+  <div id="text">Kamu lagi duduk, terus tiba-tiba aku nanya...</div>
+  <div id="choices"></div>
+</div>
+
+<script>
+const story = {
+  start:{
+    text:`Hari ini gue penasaran...
+Sebenernya akhir-akhir ini, apa hal yang paling sering kamu pikirin tentang kita?`,
+    choices:[
+      { label:"Tentang masa depan kita", next:"future"},
+      { label:"Tentang perasaan kamu ke aku", next:"feel"},
+      { label:"Tentang kenapa kita bisa sejauh ini", next:"why"}
+    ]
+  },
+
+  future:{
+    text:`Kalau ngomongin masa depan...
+Kamu tuh tipe yang takut mikirin jauh-jauh, atau justru seneng ngebayangin semuanya?`,
+    choices:[
+      { label:"Sebenernya aku takut", next:"future_fear"},
+      { label:"Aku seneng ngebayangin", next:"future_dream"}
+    ]
+  },
+
+  future_fear:{
+    text:`Takut tuh wajar...
+Tapi menurut kamu, bagian mana dari masa depan yang bikin kamu paling khawatir?`,
+    choices:[
+      { label:"Takut ga cukup buat kamu", next:"deep1"},
+      { label:"Takut kita berubah", next:"deep1"}
+    ]
+  },
+
+  future_dream:{
+    text:`Lucu ya...
+Orang yang mau sama seseorang biasanya punya bayangan kecil.
+Kamu... kalo mikirin aku, bayanginnya yang kayak apa sih?`,
+    choices:[
+      { label:"Kehidupan bareng yang chill aja", next:"deep1"},
+      { label:"Yang serius banget sampe masa depan", next:"deep1"}
+    ]
+  },
+
+  feel:{
+    text:`Tentang perasaan...
+Menurut kamu, kamu lebih banyak sayang atau lebih banyak takut kehilangan?`,
+    choices:[
+      { label:"Lebih banyak sayang", next:"feel_love"},
+      { label:"Lebih takut kehilangan", next:"feel_fear"}
+    ]
+  },
+
+  feel_love:{
+    text:`Sayang tuh lucu ya...
+Kadang nunjukinnya gampang, kadang malah nyangkut di tenggorokan.
+Selama ini, cara kamu paling jujur buat nunjukin sayang itu apa sih?`,
+    choices:[
+      { label:"Lewat perhatian kecil", next:"deep2"},
+      { label:"Lewat cara aku ngomong", next:"deep2"}
+    ]
+  },
+
+  feel_fear:{
+    text:`Takut kehilangan itu tanda kamu peduli...
+Tapi kadang juga capek.
+Menurut kamu, apa hal yang paling bikin rasa takut itu muncul?`,
+    choices:[
+      { label:"Kepikiran hal-hal buruk", next:"deep2"},
+      { label:"Takut aku berubah", next:"deep2"}
+    ]
+  },
+
+  why:{
+    text:`Jujur aja...
+Kamu pernah mikir ga, kenapa kita bisa nyantol satu sama lain selama ini?`,
+    choices:[
+      { label:"Pernah banget", next:"why_yes"},
+      { label:"Ga kepikiran, tapi kerasa", next:"why_feel"}
+    ]
+  },
+
+  why_yes:{
+    text:`Menurutmu... faktor paling kuatnya apa sih?
+Cocok? Nyaman? Atau kebiasaan?`,
+    choices:[
+      { label:"Cocok", next:"deep3"},
+      { label:"Nyaman", next:"deep3"}
+    ]
+  },
+
+  why_feel:{
+    text:`Kadang yang ga dijelasin malah paling berasa.
+Menurut kamu, apa hal kecil dariku yang bikin kamu tetep stay?`,
+    choices:[
+      { label:"Cara kamu ngomong", next:"deep3"},
+      { label:"Cara kamu liat aku", next:"deep3"}
+    ]
+  },
+
+  deep1:{ text:`Kamu tau ga...
+Dari semua hal yang kamu pikirin barusan, aku cuma mau bilang satu hal:
+Aku tetep di sini.`, choices:[{label:"lanjut", next:"deepFinal"}] },
+
+  deep2:{ text:`Lucu ya...
+Semua jawaban kamu tadi, entah yang berat atau yang manis...
+Semuanya bikin aku makin ngerti kamu.`, choices:[{label:"lanjut", next:"deepFinal"}] },
+
+  deep3:{ text:`Kadang hubungan yang keliatannya simpel, diam-diam punya kedalaman yg cuma kita yang tau.`, choices:[{label:"lanjut", next:"deepFinal"}] },
+
+  deepFinal:{
+    text:`Sekarang...
+Ada satu hal terakhir yang mau aku bilang ke kamu.`,
+    choices:[{label:"apa?", next:"preFinal"}]
+  },
+
+  preFinal:{
+    text:`coba kamu liat muka aku.`,
+    choices:[{label:"mau", next:"spotify"}]
+  },
+
+  spotify:{
+    text:`...`,
+    choices:[]
+  }
+};
+
+let current = "start";
+const textEl = document.getElementById("text");
+const choiceBox = document.getElementById("choices");
+
+function render(){
+  const page = story[current];
+  textEl.textContent = page.text;
+  choiceBox.innerHTML = "";
+
+  if(current === "spotify"){
+    window.location.href = "https://open.spotify.com/track/0WQiDwKJclirSYG9v5tayI?si=8bcee7f372474dbb";
+    return;
+  }
+
+  page.choices.forEach(c=>{
+    const div=document.createElement("div");
+    div.className="choice";
+    div.textContent=c.label;
+    div.onclick=()=>{ current=c.next; render(); };
+    choiceBox.appendChild(div);
+  });
+}
+render();
+
+/* LEAF SPAWNER */
+function spawnLeaf(){
+  const leaf=document.createElement('div');
+  leaf.className='leaf';
+
+  const size = 18 + Math.random()*20;
+  leaf.style.width = size + 'px';
+  leaf.style.height = size + 'px';
+
+  leaf.style.left = Math.random()*100 + 'vw';
+  leaf.style.animationDuration = (5 + Math.random()*4)+'s';
+
+  document.body.appendChild(leaf);
+  setTimeout(()=>leaf.remove(),10000);
+}
+setInterval(spawnLeaf,300);
+</script>
+</body>
+</html>
